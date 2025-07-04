@@ -41,4 +41,17 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Create an admin user.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Administrator',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('admin'),
+            'email_verified_at' => now(),
+        ]);
+    }
 }

@@ -1,61 +1,243 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Contact Manager with Docker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern contact management system built with Laravel 11, featuring Docker containerization, authentication, and comprehensive testing.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Complete CRUD Operations** for contacts
+- **User Authentication** with session management
+- **Search & Filter** functionality
+- **Responsive Bootstrap 5 UI**
+- **Docker containerization** (PHP 8.3 FPM, Nginx, MariaDB, phpMyAdmin)
+- **Comprehensive testing** with PHPUnit
+- **Admin user factory** with predefined credentials
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🐳 Docker Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **PHP 8.3 FPM** - Application server
+- **Nginx Alpine** - Web server  
+- **MariaDB Latest** - Database
+- **phpMyAdmin** - Database management
 
-## Learning Laravel
+## 📋 Prerequisites
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Docker & Docker Compose
+- Git
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🛠️ Quick Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Clone & Build
 
-## Laravel Sponsors
+```bash
+git clone <repository-url>
+cd laravel-contact-manager
+docker-compose up -d --build
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. Install Dependencies
 
-### Premium Partners
+```bash
+docker-compose exec app composer install
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 3. Setup Application
 
-## Contributing
+```bash
+# Generate application key
+docker-compose exec app php artisan key:generate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Run migrations
+docker-compose exec app php artisan migrate
 
-## Code of Conduct
+# Seed admin user
+docker-compose exec app php artisan db:seed --class=AdminUserSeeder
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🌐 Access Points
 
-## Security Vulnerabilities
+- **Application**: http://localhost:8000
+- **phpMyAdmin**: http://localhost:8080
+  - Server: `db`
+  - Username: `laravel`
+  - Password: `laravel`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🔐 Default Login Credentials
 
-## License
+- **Email**: admin@admin.com
+- **Password**: admin
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📁 Project Structure
+
+```
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── AuthController.php      # Authentication logic
+│   │   └── ContactController.php   # Contact CRUD operations
+│   └── Models/
+│       ├── Contact.php             # Contact model with search scope
+│       └── User.php                # User model
+├── database/
+│   ├── factories/
+│   │   └── UserFactory.php         # User factory with admin method
+│   ├── migrations/
+│   │   └── create_contacts_table.php
+│   └── seeders/
+│       └── AdminUserSeeder.php     # Creates admin user
+├── resources/views/
+│   ├── auth/
+│   │   └── login.blade.php         # Beautiful login form
+│   ├── contacts/                   # Contact management views
+│   └── layouts/
+│       └── app.blade.php           # Main layout with session info
+├── tests/Feature/
+│   └── AuthenticationTest.php      # Comprehensive auth tests
+├── docker/                         # Docker configuration
+├── docker-compose.yml
+└── Dockerfile
+```
+
+## 🧪 Testing
+
+Run the comprehensive test suite:
+
+```bash
+# Run all tests
+docker-compose exec app php artisan test
+
+# Run specific test file
+docker-compose exec app php artisan test tests/Feature/AuthenticationTest.php
+
+# Run with coverage
+docker-compose exec app php artisan test --coverage
+```
+
+### Test Coverage
+
+The `AuthenticationTest` class includes:
+
+- ✅ Login page accessibility
+- ✅ Admin user factory creation
+- ✅ Successful authentication with correct credentials
+- ✅ Session facade usage verification
+- ✅ Failed authentication handling
+- ✅ Logout functionality
+- ✅ Route protection middleware
+- ✅ Session persistence
+- ✅ Remember me functionality
+
+## 📊 Database Schema
+
+### Contacts Table
+```sql
+CREATE TABLE contacts (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    email VARCHAR(150) UNIQUE,
+    phone VARCHAR(20),
+    address TEXT,
+    city VARCHAR(100),
+    state VARCHAR(100),
+    postal_code VARCHAR(20),
+    country VARCHAR(100),
+    company VARCHAR(150),
+    job_title VARCHAR(100),
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+## 🔧 Development Commands
+
+```bash
+# Start containers
+docker-compose up -d
+
+# Stop containers
+docker-compose down
+
+# View logs
+docker-compose logs -f app
+
+# Access application container
+docker-compose exec app bash
+
+# Run artisan commands
+docker-compose exec app php artisan <command>
+
+# Install new packages
+docker-compose exec app composer require <package>
+```
+
+## 🎨 UI Features
+
+- **Gradient design** with modern aesthetics
+- **Responsive layout** for all screen sizes
+- **Card-based contact display** with hover effects
+- **Search functionality** with real-time filtering
+- **Flash messages** for user feedback
+- **Session information display** in sidebar
+- **Quick action buttons** (call, email, map)
+
+## 🔐 Authentication Features
+
+- **Session-based authentication** using Laravel's built-in system
+- **Custom session data** storage using Session facade
+- **Remember me** functionality
+- **Route protection** with middleware
+- **Beautiful login form** with demo credentials display
+- **Logout functionality** with session cleanup
+
+## 📝 API Endpoints
+
+### Authentication
+- `GET /login` - Show login form
+- `POST /login` - Authenticate user
+- `POST /logout` - Logout user
+
+### Contacts (Protected)
+- `GET /contacts` - List all contacts
+- `GET /contacts/create` - Show create form
+- `POST /contacts` - Store new contact
+- `GET /contacts/{id}` - Show contact details
+- `GET /contacts/{id}/edit` - Show edit form
+- `PUT /contacts/{id}` - Update contact
+- `DELETE /contacts/{id}` - Delete contact
+
+## 🛡️ Security Features
+
+- CSRF protection on all forms
+- Input validation and sanitization
+- SQL injection prevention with Eloquent ORM
+- Session regeneration on login
+- Password hashing with bcrypt
+- Route protection with authentication middleware
+
+## 🚀 Production Deployment
+
+For production deployment:
+
+1. Update `.env` with production values
+2. Set `APP_ENV=production`
+3. Set `APP_DEBUG=false`
+4. Use proper SSL certificates
+5. Configure proper database credentials
+6. Set up proper logging
+7. Enable caching and optimization
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](LICENSE).
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Submit a pull request
+
+## 📞 Support
+
+For support and questions, please open an issue in the repository.

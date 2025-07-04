@@ -26,15 +26,52 @@
         .contact-card:hover {
             transform: translateY(-2px);
         }
+        .top-navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
     </style>
 </head>
 <body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg top-navbar text-white">
+        <div class="container-fluid">
+            <span class="navbar-brand text-white mb-0 h1">
+                <i class="fas fa-users me-2"></i>Contact Manager
+            </span>
+            
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-2"></i>
+                        {{ Auth::user()->name }}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user me-2"></i>Profile
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="dropdown-item">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
             <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
                 <div class="position-sticky pt-3">
-                    <h5 class="text-muted px-3 mb-3">Contact Manager</h5>
+                    <h6 class="text-muted px-3 mb-3">Navigation</h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('contacts.index') ? 'active' : '' }}" 
@@ -51,6 +88,17 @@
                             </a>
                         </li>
                     </ul>
+
+                    <hr>
+                    
+                    <h6 class="text-muted px-3 mb-3">Session Info</h6>
+                    <div class="px-3">
+                        <small class="text-muted">
+                            <strong>User:</strong> {{ Session::get('user_email') }}<br>
+                            <strong>Authenticated:</strong> {{ Session::get('user_authenticated') ? 'Yes' : 'No' }}<br>
+                            <strong>Session ID:</strong> {{ substr(Session::getId(), 0, 8) }}...
+                        </small>
+                    </div>
                 </div>
             </nav>
 
